@@ -1,0 +1,36 @@
+/* Custom CSS for the login page */
+
+/* The image used in the example is not provided, so this uses a placeholder URL.
+   REPLACE 'YOUR_BACKGROUND_IMAGE_URL' with the actual URL or path to your image.
+*/
+.main-container {
+    
+    /* Set the background image and make it cover the entire viewport */
+    background-image: url('../logo/main.jpg'), 
+                      linear-gradient(to right, rgba(255, 165, 0, 0.4), rgba(0, 0, 255, 0.4)); /* Orange-to-Blue Gradient Overlay */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(0.9);
+}
+
+
+
+
+
+/* Styling for the Sign In button */
+
+
+
+a#login-tab.active,
+a#register-tab.active {
+    background-color: white !important;
+    color: #333 !important;
+    border: none !important;
+}
+
+a#register-tab,a#login-tab {
+    background-color: transparent !important;
+    /* color: white !important; */
+    border: transparent !important;
+}

@@ -1,0 +1,184 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Main Page {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card mx-4 mt-3 py-3">
+        <div class="card-body">
+            <h4>Profile</h4>
+            <div class="row">
+                <div class="col-auto">
+                    {% if not request.user.info.profile %}
+                    <img src="{% static 'logo/profile_logo.png' %}" class="rounded-circle" width="150" height="150" alt="Profile">
+                    {% else %}
+                    <img src="{{ request.user.info.profile.url }}" class="rounded-circle" width="150" height="150" alt="Profile">
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <p>{{ request.user.username }}</p>
+                    <p>{{ request.user.email }}</p>
+                    <div class="row">
+                        <div class="col">
+                            <h6>{{request.user.posts.count}}</h6>
+                            <p>Posts</p>
+                        </div>
+                        <div class="col">
+                            <h6>{{ total_likes }}</h6>
+                            <p>Likes</p>
+                        </div>
+                        <div class="col">
+                            <h6>{{ total_comments }}</h6>
+                            <p>Comments</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4 class="mx-4">Your Posts</h4>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert mt-2 {% if message.tags == 'error' %} alert-danger {% endif %} alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% for post in posts %}
+    <div class="card mx-4 mt-3">
+        <div class="card-titile mx-3 mt-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="row">
+                    <div class="col-3">
+                        {% if post.user.info.profile %}
+                        <img src="{{ post.user.info.profile.url }}" width="40" class="rounded-circle me-3">
+                        {% else %}
+                        <img src="{% static 'logo/profile_logo.png' %}" class="rounded-circle me-2" width="40">
+                        {% endif %}
+                    </div>
+                    <div class="col"><strong>{{ post.user.username}}</strong>
+                        <br><span class="text-secondary">{{ post.date|timesince }} ago</span>
+                    </div>
+                </div>
+                {% if request.user == post.user %}
+                <a href="{% url 'website:profile-post-delete' post.id %}" class="btn"><i class="fa-solid fa-trash-can"></i></a>
+                {% endif %}
+            </div>
+
+        </div>
+        <div class="card-body">
+            <p>{{ post.description}}</p>
+            {% if post.image %}
+            <img src="{{ post.image.url }}" class="w-25">
+            {% endif %}
+            {% if post.video %}
+            <video src="{{ post.video.url }}"></video>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-3">
+                    <a class="btn" {% if request.user.is_authenticated %} href="{% url 'website:profile-like-view' post.id %}" {% endif %}>
+                        {% if post.liked_by_user %}
+                        <i class="fa-solid fa-heart text-danger"></i>
+                        {% else %}
+                        <i class="fa-regular fa-heart"></i>
+                        {% endif %} <spand>
+                            {% if post.post_get_likes %}
+                            <span
+                                class="{% if post.liked_by_user %} text-danger {% endif %}">{{post.post_get_likes.count}}</span>
+                            {% endif %}
+                        </spand>
+                    </a>
+                </div>
+                <div class="col-2"><a class="btn {% if request.user.is_authenticated %} comment_btn {% endif %}"><i class="fa-regular fa-comment"></i></a></div>
+            </div>
+            <div class="inputGroup mt-1 d-none">
+                <form action="{% url 'website:profile-comment-view' post.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        {% if post.user.info.profile %}
+                        <img src="{{ post.user.info.profile.url }}" width="40" class="rounded-circle me-3">
+                        {% else %}
+                        <img src="{% static 'logo/profile_logo.png' %}" class="rounded-circle me-2" width="40">
+                        {% endif %}
+                    <input type="text" name="comment-text" class="form-control" placeholder="Type something...">
+                    <button class="btn btn-secondary" type="submit">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                    </div>
+                </form>
+            </div>
+            <div class="comment-section">
+                <div class="comments-container">
+            {% for comment in post.post_get_comments %}
+            <div class="input-group">
+                    {% if comment.user.info.profile %}
+                        <img src="{{ comment.user.info.profile.url }}" width="40" height="40" class="rounded-circle me-3">
+                        {% else %}
+                        <img src="{% static 'logo/profile_logo.png' %}" width="40" height="40" class="rounded-circle me-3">
+                        {% endif %}
+                    <div class="card mt-2 form-control">
+                        <div class="card-body">
+                            <strong>{{comment.user.username}} </strong><span class="text-secondary">{{ comment.date|timesince }} ago</span><br>
+                            {{ comment.comment }}
+                        </div>
+                    </div>
+                    </div>
+                {% endfor %}
+                </div>
+                
+                {% if post.post_get_comments and post.post_get_comments.count > 2 %}
+                    <button class="toggle-comments btn btn-link mt-2">See All Comments</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script>
+
+document.querySelectorAll('.comment_btn').forEach(function(button) {
+    button.addEventListener('click', function() {
+        const row = this.closest('.row');
+        const inputGroup = row.nextElementSibling;
+        
+        if (inputGroup && inputGroup.classList.contains('inputGroup')) {
+            inputGroup.classList.toggle('d-none');
+        }
+    });
+});
+
+document.querySelectorAll('.comment-section').forEach(section => {
+
+    const commentsContainer = section.querySelector('.comments-container');
+    const comments = commentsContainer.querySelectorAll('.input-group');
+    const toggleBtn = section.querySelector('.toggle-comments');
+    const initialVisible = 2; // show only 2
+
+    // Hide comments after first 2
+    comments.forEach((c, i) => {
+        if (i >= initialVisible) c.classList.add('d-none');;
+    });
+
+    toggleBtn?.addEventListener('click', () => {
+        const expanded = toggleBtn.dataset.expanded === 'true';
+
+        if (expanded) {
+            // Collapse
+            comments.forEach((c, i) => {
+                if (i >= initialVisible) c.classList.add('d-none');
+            });
+            toggleBtn.textContent = "See All Comments";
+            toggleBtn.dataset.expanded = "false";
+        } else {
+            // Expand
+            comments.forEach(c => c.classList.remove('d-none'));
+            toggleBtn.textContent = "Hide Comments";
+            toggleBtn.dataset.expanded = "true";
+        }
+    });
+});
+
+</script>
+{% endblock %}

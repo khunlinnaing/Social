@@ -1,0 +1,59 @@
+{% load static %}
+{% load nav_tags %}
+
+{{url_name_in}}
+{% url_name_in 'index' as is_index_page %}
+{% url_name_in 'profile-view' as is_profile_page %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'website:index' %}">
+                         <span class="icon-span bg-dark rounded border d-inline-flex justify-content-center align-items-center">
+                            <div style="width: 20px" class="text-center"><i class="fa-light fa-s text-white"></i></div>
+                        </span> Social</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if is_index_page %}bg-dark text-white rounded {% endif %}" aria-current="page" href="{% url 'website:index' %}"><i class="fa-regular fa-house"></i> Home</a>
+                </li>
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link {% if is_profile_page %}bg-dark text-white rounded {% endif %}" href="{% url 'website:profile-view' %}"><i class="fa-regular fa-user"></i> Profile</a>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                {% if not request.user.is_authenticated %}
+                <li class="nav-item me-2">
+                    <a class="btn btn-outline-primary" href="{% url 'website:login-view' %}">Login</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-primary" href="{% url 'website:register-view' %}">Register</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="btn">
+                    {% if request.user.info.profile %}
+                    <img src="{{request.user.info.profile.url}}" class="rounded-circle me-2" width="40">
+                    {% else %}
+                        <img src="{% static 'logo/profile_logo.png' %}" class="rounded-circle me-2" width="40">
+                    {% endif %}
+                    {{request.user.username}}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn mt-2" href="{% url 'website:logout-view' %}"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+</nav>
