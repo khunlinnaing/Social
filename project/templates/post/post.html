@@ -56,7 +56,7 @@
     </div>
     {% endif %}
     {% for post in posts %}
-    <div class="card mx-4 mt-3">
+    <div class="card mx-4 mt-3" >
         <div class="card-titile mx-3 mt-3">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="row">
@@ -104,8 +104,8 @@
                 </div>
                 <div class="col-2"><a class="btn {% if request.user.is_authenticated %} comment_btn {% endif %}"><i class="fa-regular fa-comment"></i></a></div>
             </div>
-            <div class="inputGroup mt-1 d-none">
-                <form action="{% url 'website:comment-view' post.id %}" method="post">
+            <div class="inputGroup mt-1 d-none" >
+                <form action="{% url 'website:comment-view' post.id %}"  method="post">
                     {% csrf_token %}
                     <div class="input-group">
                         {% if post.user.info.profile %}
