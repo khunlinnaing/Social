@@ -1,6 +1,8 @@
 import os
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from django.contrib import messages
 from project.forms.login_forms import LoginForm
@@ -28,6 +30,7 @@ def index(request):
         form = PostForm()
         return render(request, 'post/post.html', context={"form": form, 'posts': posts})
 
+@login_required
 def post_delete(request, pk):
     post = Post.objects.filter(pk=pk).first()
     if post:
@@ -60,6 +63,7 @@ def login_view(request):
         form = LoginForm()
         return render(request, 'auth/login.html', context={"form": form})
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('website:index')
@@ -78,9 +82,9 @@ def register_view(request):
     else:
         form = RegisterForm()
         return render(request, 'auth/register.html', context={"form": form})
-    
+
+@login_required
 def profile_view(request):
-    
     posts = Post.objects.filter(user=request.user).annotate(
     liked_by_user=Count(
         'likes',
@@ -91,6 +95,7 @@ def profile_view(request):
     total_comments = sum(p.comments.count() for p in posts)
     return render(request, 'profile/index.html', context={"posts": posts, "total_likes": total_likes, "total_comments": total_comments,})
 
+@login_required
 def profile_like_view(request, pk):
     post = Post.objects.filter(pk=pk).first()
     if post:
@@ -99,15 +104,26 @@ def profile_like_view(request, pk):
             like.delete()
         else:
             Like.objects.create(user=request.user, post=post)
-        
+            
+    if request.headers.get("HX-Request"):
+        response = HttpResponse()
+        response["HX-Refresh"] = "true"
+        return response
     return redirect('website:profile-view')
 
+@login_required
 def profile_comment_view(request, pk):
     post = Post.objects.filter(pk=pk).first()
     if post:
         Comment.objects.create(post=post, user=request.user, comment= request.POST.get('comment-text'))
+    
+    if request.headers.get("HX-Request"):
+        response = HttpResponse()
+        response["HX-Refresh"] = "true"
+        return response
     return redirect('website:profile-view')
 
+@login_required
 def profile_post_delete(request, pk):
     post = Post.objects.filter(pk=pk).first()
     if post:
@@ -123,7 +139,8 @@ def profile_post_delete(request, pk):
     else:
         messages.error(request, 'This post not found')
         return redirect("website:profile-view")
-    
+
+@login_required   
 def like_view(request, pk):
     post = Post.objects.filter(pk=pk).first()
     if post:
@@ -132,11 +149,20 @@ def like_view(request, pk):
             like.delete()
         else:
             Like.objects.create(user=request.user, post=post)
-        
+    if request.headers.get("HX-Request"):
+        response = HttpResponse()
+        response["HX-Refresh"] = "true"
+        return response
     return redirect('website:index')
 
+@login_required
 def comment_view(request, pk):
     post = Post.objects.filter(pk=pk).first()
     if post:
         Comment.objects.create(post=post, user=request.user, comment= request.POST.get('comment-text'))
+    if request.headers.get("HX-Request"):
+        response = HttpResponse()
+        response["HX-Refresh"] = "true"
+        return response
     return redirect('website:index')
+    

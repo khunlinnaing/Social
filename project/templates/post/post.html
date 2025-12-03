@@ -89,7 +89,7 @@
         <div class="card-footer">
             <div class="row">
                 <div class="col-3">
-                    <a class="btn" {% if request.user.is_authenticated %} href="{% url 'website:like-view' post.id %}" {% endif %}>
+                    <a class="btn" {% if request.user.is_authenticated %} hx-get="{% url 'website:like-view' post.id %}"  hx-target="#post-card-{{post.id}}" hx-swap="outerHTML" {% endif %}>
                         {% if post.liked_by_user %}
                         <i class="fa-solid fa-heart text-danger"></i>
                         {% else %}
@@ -105,7 +105,7 @@
                 <div class="col-2"><a class="btn {% if request.user.is_authenticated %} comment_btn {% endif %}"><i class="fa-regular fa-comment"></i></a></div>
             </div>
             <div class="inputGroup mt-1 d-none" >
-                <form action="{% url 'website:comment-view' post.id %}"  method="post">
+                <form hx-post="{% url 'website:comment-view' post.id %}" hx-target="#post-card-{{post.id}}" hx-swap="outerHTML">
                     {% csrf_token %}
                     <div class="input-group">
                         {% if post.user.info.profile %}
@@ -113,14 +113,14 @@
                         {% else %}
                         <img src="{% static 'logo/profile_logo.png' %}" class="rounded-circle me-2" width="40">
                         {% endif %}
-                    <input type="text" name="comment-text" class="form-control" placeholder="Type something...">
+                    <input type="text" name="comment-text" class="form-control" placeholder="Write a comment....">
                     <button class="btn btn-secondary" type="submit">
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
                     </div>
                 </form>
             </div>
-            <div class="comment-section">
+            <div class="comment-section" id="post-card-{{post.id}}">
                 <div class="comments-container">
             {% for comment in post.post_get_comments %}
             <div class="input-group">
@@ -130,7 +130,7 @@
                         <img src="{% static 'logo/profile_logo.png' %}" width="40" height="40" class="rounded-circle me-3">
                         {% endif %}
                     <div class="card mt-2 form-control">
-                        <div class="card-body">
+                        <div >
                             <strong>{{comment.user.username}} </strong><span class="text-secondary">{{ comment.date|timesince }} ago</span><br>
                             {{ comment.comment }}
                         </div>
