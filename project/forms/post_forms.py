@@ -10,6 +10,10 @@ class PostForm(forms.ModelForm):
             'video': forms.FileInput(attrs={'class': 'form-control d-none'}), 
             }
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.label_suffix = ""
+        
     def clean_image(self):
         image = self.cleaned_data.get('image')
 

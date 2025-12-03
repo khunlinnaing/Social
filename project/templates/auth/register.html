@@ -4,90 +4,100 @@
 <div class="main-container h-100 pb-4">
     <h2 class="mb-4 text-center pt-4">Social</h2>
     <p class="text-center small-text">Connect with friends and share your moments</p>
+    
     <div class="d-flex justify-content-center">
-        <div class="btn-group mb-2 w-25 border border-light border-2" role="group" style="background-color: rgb(29 28 28 / 20%) !important;">
-            <a href="{% url 'website:login-view' %}" class="btn btn-sm m-1 " id="login-tab">Login</a>
-            <a href="{% url 'website:register-view' %}" class="btn btn-sm active m-1 rounded" id="register-tab">Register</a>
+        <div class="col-9 col-sm-3">
+
+            <div class="btn-group mb-2 border border-2 w-100">
+                <a href="{% url 'website:login-view' %}" class="btn btn-sm m-1 " id="login-tab">Login</a>
+                <a href="{% url 'website:register-view' %}" class="btn btn-sm m-1 active rounded" id="register-tab">Register</a>
+            </div>
+
         </div>
     </div>
-    <div class="d-flex justify-content-center align-items-center">
-        <div class="card p-4 text-center login-card w-25"
-            style="background-color: rgba(255, 255, 255, 0.2) !important;">
-            <div class="text-start">
-                <form method="POST" enctype="multipart/form-data" autocomplete="False">
-                    {% csrf_token %}
-                    <h5 class="mb-3 text-auto">Create Account</h5>
-                    <p class="small-text mb-4">Join our community and start sharing</p>
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-danger" role="alert">{{ message}}</div>
-                        {% endfor %}
-                    {% endif %}
-                    <div class="mb-3 form-group">
-                        {{ form.username.label_tag }}
-                        {{ form.username }}
-                        {% if form.username.errors %}
-                        <div class="text-danger small">
-                            {% for error in form.username.errors %}
-                            {{ error }}
+
+    <div class="d-flex justify-content-center">
+        <div class="col-9 col-sm-3">
+            <div class="card p-4 text-center login-card w-100"
+                style="background-color: rgba(255, 255, 255, 0.2) !important;">
+                <div class="text-start">
+                    <form method="POST" enctype="multipart/form-data" autocomplete="False">
+                        {% csrf_token %}
+                        <h5 class="mb-3 text-auto">Create Account</h5>
+                        <p class="small-text mb-4">Join our community and start sharing</p>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-danger" role="alert">{{ message}}</div>
                             {% endfor %}
-                        </div>
                         {% endif %}
-                    </div>
-                    <div class="mb-3 form-group">
-                        {{ form.email.label_tag }}
-                        {{ form.email }}
-                        {% if form.email.errors %}
-                        <div class="text-danger small">
-                            {% for error in form.email.errors %}
-                            {{ error }}
-                            {% endfor %}
+                        <div class="mb-3 form-group">
+                            {{ form.username.label_tag }}
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.username.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
-                        {% endif %}
-                    </div>
-                    <div class="mb-4 form-group">
-                        {{ form.password.label_tag }}
-                        {{ form.password }}
-                        {% if form.password.errors %}
-                        <div class="text-danger small">
-                            {% for error in form.password.errors %}
-                            {{ error }}
-                            {% endfor %}
+                        <div class="mb-3 form-group">
+                            {{ form.email.label_tag }}
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.email.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
-                        {% endif %}
-                    </div>
-                    <div class="mb-4 form-group">
-                        {{ form.confirm_password.label_tag }}
-                        {{ form.confirm_password }}
-                        {% if form.confirm_password.errors %}
-                        <div class="text-danger small">
-                            {% for error in form.confirm_password.errors %}
-                            {{ error }}
-                            {% endfor %}
+                        <div class="mb-4 form-group">
+                            {{ form.password.label_tag }}
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.password.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
-                        {% endif %}
-                    </div>
-                    <div class="mb-4 form-group">
-                        {{ form.profile.label_tag }}
-                        {{ form.profile }}
-                        {% if form.profile.errors %}
-                        <div class="text-danger small">
-                            {% for error in form.profile.errors %}
-                            {{ error }}
-                            {% endfor %}
+                        <div class="mb-4 form-group">
+                            {{ form.confirm_password.label_tag }}
+                            {{ form.confirm_password }}
+                            {% if form.confirm_password.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.confirm_password.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
-                        {% endif %}
-                    </div>
-                    <button type="submit" class="btn btn-dark btn-lg w-100 mb-3 sign-in-btn">Create Account</button>
-                </form>
+                        <div class="mb-4 form-group">
+                            {{ form.profile.label_tag }}
+                            {{ form.profile }}
+                            {% if form.profile.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.profile.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-lg w-100 mb-3 sign-in-btn">Create Account</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
     <div class="d-flex justify-content-center align-items-center">
-        <div class="demo-credentials mt-3 p-2 rounded w-25"
-            style="background-color: rgba(255, 255, 255, 0.2) !important;">
-            <p class="mb-0 text-center text-white small-text">Demo account for testing:</p>
-            <p class="mb-0 text-center text-white small-text">Email: demo@example.com,<br> Password: demo123</p>
+        <div class="col-9 col-sm-3">
+            <div class="demo-credentials mt-3 p-2 rounded w-100"
+                style="background-color: rgba(255, 255, 255, 0.2) !important;">
+                <p class="mb-0 text-center text-white small-text">Demo account for testing:</p>
+                <p class="mb-0 text-center text-white small-text">Email: demo@example.com,<br> Password: demo123</p>
+            </div>
         </div>
     </div>
 </div>
