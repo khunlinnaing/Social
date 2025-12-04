@@ -21,8 +21,8 @@ def index(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save(commit=False)   # do NOT save yet
-            post.user = request.user         # attach logged-in user
+            post = form.save(commit=False)
+            post.user = request.user 
             post.save()
             return redirect("website:index")
         return render(request, 'post/post.html', context={"form": form, 'posts': posts})
