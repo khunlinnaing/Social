@@ -9,7 +9,7 @@ class ProfileAdminPage(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdminPage(admin.ModelAdmin):
-    list_display= ('id', "user", "description", "image", "video", "date")
+    list_display= ('id', "user", "title","content", "image", "video", "date")
     search_fields = ("user__name",)
 
 @admin.register(Like)
@@ -19,5 +19,5 @@ class LikeAdminPage(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdminPage(admin.ModelAdmin):
-    list_display= ('id', "user", "post", "comment", "date")
+    list_display= ('id', "user", "post", "content", "date")
     search_fields = ("user__name",)

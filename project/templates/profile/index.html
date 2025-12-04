@@ -67,7 +67,8 @@
 
         </div>
         <div class="card-body">
-            <p>{{ post.description}}</p>
+            <h6>{{ post.title }}</h6>
+            <p>{{ post.content}}</p>
             {% if post.image %}
             <img src="{{ post.image.url }}" class="w-25">
             {% endif %}
@@ -121,7 +122,7 @@
                     <div class="card mt-2 form-control">
                         <div >
                             <strong>{{comment.user.username}} </strong><span class="text-secondary">{{ comment.date|timesince }} ago</span><br>
-                            {{ comment.comment }}
+                            {{ comment.content }}
                         </div>
                     </div>
                     </div>

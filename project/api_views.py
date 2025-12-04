@@ -1,6 +1,6 @@
-import re
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -61,7 +61,9 @@ def posts_view(request):
     serializer = PostSerializer(posts, many=True,  context={'request': request}) 
     return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
+
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_posts_view(request):
     form = PostForm(request.POST, request.FILES)
     if form.is_valid():
@@ -79,20 +81,63 @@ def create_posts_view(request):
             "status": status.HTTP_201_CREATED,
             "id": post.id,
             "user": post.user.id,
-            "description": post.description,
+            "title": post.title,
+            "content": post.content,
             "image": image_url,
             "video": video_url,
             "date": post.date,
             "message": "Create is success"
-        }, status=status.HTTP_201_CREATED)
+        })
     else:
         errors = {field: " ".join([str(e) for e in errs]) for field, errs in form.errors.items()}
         return JsonResponse({
             "status": status.HTTP_400_BAD_REQUEST,
             "errors": errors
-        }, status=status.HTTP_400_BAD_REQUEST)
+        })
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def edit_posts_view(request, pk):
+    post = Post.objects.filter(pk=pk, user=request.user).first()
+
+    if not post:
+        return JsonResponse({
+            "status": status.HTTP_404_NOT_FOUND,
+            "message": "ID is not found or not owner"
+        }, status=status.HTTP_404_NOT_FOUND)
+
+    # Django forms do NOT support PUT directly, so convert PUT to POST
+    data = request.data.copy()
+
+    form = PostForm(data, request.FILES, instance=post)
+
+    if form.is_valid():
+        updated_post = form.save()
+
+        image_url = request.build_absolute_uri(updated_post.image.url) if updated_post.image else None
+        video_url = request.build_absolute_uri(updated_post.video.url) if updated_post.video else None
+
+        return JsonResponse({
+            "status": status.HTTP_200_OK,
+            "id": updated_post.id,
+            "user": updated_post.user.id,
+            "title": updated_post.title,
+            "content": updated_post.content,
+            "image": image_url,
+            "video": video_url,
+            "date": updated_post.date,
+            "message": "Update success"
+        }, status=status.HTTP_200_OK)
+
+    errors = {field: " ".join([str(e) for e in errs]) for field, errs in form.errors.items()}
+    return JsonResponse({
+        "status": status.HTTP_400_BAD_REQUEST,
+        "errors": errors
+    }, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_posts_view(request, pk):
     import os
     post = Post.objects.filter(pk=pk, user=request.user).first()
@@ -107,7 +152,10 @@ def delete_posts_view(request, pk):
     else:
         return JsonResponse({"status": status.HTTP_404_NOT_FOUND, "message": "ID is not found or not owner"})
 
+
+
 @api_view(["POST", "GET"])
+@permission_classes([IsAuthenticated])
 def like_api(request, pk):
     post = Post.objects.filter(pk=pk).first()
     if post:
@@ -121,9 +169,8 @@ def like_api(request, pk):
     else:
         return JsonResponse({"status": status.HTTP_404_NOT_FOUND, "message": "ID is not found."})
 
-
-
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def comment_api(request, pk):
     try:
         post = Post.objects.get(pk=pk)
@@ -146,7 +193,7 @@ def comment_api(request, pk):
         )
 
     try:
-        comment = Comment.objects.create(user=request.user, post=post, comment=comment_text)
+        comment = Comment.objects.create(user=request.user, post=post, content=comment_text)
         return JsonResponse(
             {"status": status.HTTP_201_CREATED, "message": "Comment added successfully", "id": comment.id},
             status=status.HTTP_201_CREATED

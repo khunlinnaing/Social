@@ -17,10 +17,20 @@
                 {% csrf_token %}
                 <h4>Create Post</h4>
                 <div class="mb-4 form-group">
-                    {{ form.description }}
-                    {% if form.description.errors %}
+                    {{ form.title }}
+                    {% if form.title.errors %}
                     <div class="text-danger small">
-                        {% for error in form.description.errors %}
+                        {% for error in form.title.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-4 form-group">
+                    {{ form.content }}
+                    {% if form.content.errors %}
+                    <div class="text-danger small">
+                        {% for error in form.content.errors %}
                         {{ error }}
                         {% endfor %}
                     </div>
@@ -78,7 +88,8 @@
 
         </div>
         <div class="card-body">
-            <p>{{ post.description}}</p>
+            <h6>{{ post.title }}</h6>
+            <p>{{ post.content}}</p>
             {% if post.image %}
             <img src="{{ post.image.url }}" class="w-25">
             {% endif %}
@@ -132,7 +143,7 @@
                     <div class="card mt-2 form-control">
                         <div >
                             <strong>{{comment.user.username}} </strong><span class="text-secondary">{{ comment.date|timesince }} ago</span><br>
-                            {{ comment.comment }}
+                            {{ comment.content }}
                         </div>
                     </div>
                     </div>
@@ -174,7 +185,7 @@
             </video>
         `;
     });
-    const textarea = document.getElementById('id_description');
+    const textarea = document.getElementById('id_content');
     const charCount = document.getElementById('char-count');
     const maxChars = 500;
 

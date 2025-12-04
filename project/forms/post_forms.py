@@ -3,9 +3,10 @@ from project.models import Post
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['description', 'image', 'video']
+        fields = ['title', 'content', 'image', 'video']
         widgets = {
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'What\'s happening in your world?', 'rows':3}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'What\'s happening in your world?', 'rows':3}),
             'image': forms.FileInput(attrs={'class': 'form-control d-none'}),
             'video': forms.FileInput(attrs={'class': 'form-control d-none'}), 
             }

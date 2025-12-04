@@ -115,7 +115,7 @@ def profile_like_view(request, pk):
 def profile_comment_view(request, pk):
     post = Post.objects.filter(pk=pk).first()
     if post:
-        Comment.objects.create(post=post, user=request.user, comment= request.POST.get('comment-text'))
+        Comment.objects.create(post=post, user=request.user, content= request.POST.get('comment-text'))
     
     if request.headers.get("HX-Request"):
         response = HttpResponse()
@@ -159,7 +159,7 @@ def like_view(request, pk):
 def comment_view(request, pk):
     post = Post.objects.filter(pk=pk).first()
     if post:
-        Comment.objects.create(post=post, user=request.user, comment= request.POST.get('comment-text'))
+        Comment.objects.create(post=post, user=request.user, content= request.POST.get('comment-text'))
     if request.headers.get("HX-Request"):
         response = HttpResponse()
         response["HX-Refresh"] = "true"

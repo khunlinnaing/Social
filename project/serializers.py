@@ -12,7 +12,7 @@ class CommentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'comment', 'date']
+        fields = ['id', 'user', 'content', 'date']
 
 class LikeSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -28,7 +28,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('id', 'user', 'description', 'image', 'video', 'date', 'likes', 'comments')
+        fields = ('id', 'user', 'title', 'content', 'image', 'video', 'date', 'likes', 'comments')
     
     def get_image(self, obj):
         request = self.context.get('request')

@@ -1,0 +1,286 @@
+register(Need to send By Form)
+===========
+post http://localhost:9000/api/register/
+
+this parameters
+======================
+username
+email
+password
+confirm_password
+profile
+
+
+No Data
+==================
+{
+    "status": 400,
+    "errors": {
+        "username": "This field is required.",
+        "email": "This email is already registered!",
+        "password": "This field is required.",
+        "confirm_password": "This field is required."
+    }
+}
+
+Data already exit
+=====================
+{
+    "status": 400,
+    "errors": {
+        "email": "This email is already registered!",
+        "username": "A user with that username already exists."
+    }
+}
+Success Create
+======================
+{
+    "status": 201,
+    "id": 10,
+    "username": "test2",
+    "email": "test2@test.com",
+    "profile": "http://localhost:9000/media/profiles/Screenshot_from_2025-12-02_15-16-45.png",
+    "message": "Create is success"
+}
+
+
+Login
+===================
+post http://localhost:9000/api/login/
+
+parameters
+============
+username: email or account
+password: password
+
+Login Response
+========================
+Success
+============
+{
+    "user": {
+        "id": 10,
+        "username": "test2",
+        "email": "test2@test.com"
+    },
+    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY0ODI1NDQ0LCJpYXQiOjE3NjQ4MjUxNDQsImp0aSI6ImQ1NmQ1YjIwYTJjYjRjNjBiM2FhZDFiMWM5NzI4ZmY3IiwidXNlcl9pZCI6IjEwIn0.kQb10Zlj0_65_gGb6cpfWk8BeV4QpvnsSOhrXGRg0Ic",
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2NDkxMTU0NCwiaWF0IjoxNzY0ODI1MTQ0LCJqdGkiOiI0MjVhYWE5MzY5Zjg0YTAzOWRjNmNhZmY3YTNkODA3MSIsInVzZXJfaWQiOiIxMCJ9.g6C4x-NleyNNKXpCLPSHBi7cz3OSiRg1IwUIeuKSDsQ"
+}
+
+no parameters
+===================
+{
+    "detail": "Invalid credentials"
+}
+
+===============================================================================================
+
+Post
+================================
+GET Post
+get http://localhost:9000/api/posts
+[
+    {
+        "id": 32,
+        "user": {
+            "id": 1,
+            "username": "admin",
+            "email": ""
+        },
+        "description": "what the fuck",
+        "image": "http://localhost:9000/media/post/images/Screenshot_from_2025-12-02_15-16-45.png",
+        "video": null,
+        "date": "2025-12-03T15:42:23.732806Z",
+        "likes": [
+            {
+                "id": 38,
+                "user": {
+                    "id": 1,
+                    "username": "admin",
+                    "email": ""
+                },
+                "is_like": true,
+                "date": "2025-12-03T15:43:56.951095Z"
+            },
+            {
+                "id": 55,
+                "user": {
+                    "id": 3,
+                    "username": "a",
+                    "email": "a@gmail.com"
+                },
+                "is_like": true,
+                "date": "2025-12-03T16:52:00.576528Z"
+            }
+        ],
+        "comments": [
+            {
+                "id": 31,
+                "user": {
+                    "id": 3,
+                    "username": "a",
+                    "email": "a@gmail.com"
+                },
+                "comment": "hello world",
+                "date": "2025-12-03T16:44:12.852350Z"
+            },
+            {
+                "id": 32,
+                "user": {
+                    "id": 3,
+                    "username": "a",
+                    "email": "a@gmail.com"
+                },
+                "comment": "hello world",
+                "date": "2025-12-03T16:44:19.703461Z"
+            },
+            {
+                "id": 33,
+                "user": {
+                    "id": 3,
+                    "username": "a",
+                    "email": "a@gmail.com"
+                },
+                "comment": "hello world",
+                "date": "2025-12-03T16:44:51.623866Z"
+            },
+            {
+                "id": 34,
+                "user": {
+                    "id": 3,
+                    "username": "a",
+                    "email": "a@gmail.com"
+                },
+                "comment": "hello world",
+                "date": "2025-12-03T16:48:25.148840Z"
+            },
+            {
+                "id": 35,
+                "user": {
+                    "id": 3,
+                    "username": "a",
+                    "email": "a@gmail.com"
+                },
+                "comment": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+                "date": "2025-12-03T16:51:03.737562Z"
+            }
+        ]
+    }
+]
+
+Create
+=================
+post http://localhost:9000/api/posts/create
+
+parameters(need to add token in authenticated)
+=============
+description String
+image
+video
+
+No token Response
+==================
+{
+    "detail": "Authentication credentials were not provided."
+}
+
+No parameters
+=====================
+{
+    "status": 400,
+    "errors": {
+        "description": "This field is required."
+    }
+}
+
+add parameters(description is required)
+===========================================
+{
+    "status": 201,
+    "id": 34,
+    "user": 10,
+    "description": "test",
+    "image": null,
+    "video": null,
+    "date": "2025-12-04T05:26:20.255Z",
+    "message": "Create is success"
+}
+
+Delete Post
+=======================================================
+DELETE http://localhost:9000/api/posts/<postid>/delete
+
+Token expired
+{
+    "detail": "Given token not valid for any token type",
+    "code": "token_not_valid",
+    "messages": [
+        {
+            "token_class": "AccessToken",
+            "token_type": "access",
+            "message": "Token is expired"
+        }
+    ]
+}
+
+ID not found
+{
+    "status": 404,
+    "message": "ID is not found or not owner"
+}
+
+Delete Success
+{
+    "status": 200,
+    "message": "Delete is sucess"
+}
+
+No Token
+{
+    "detail": "Authentication credentials were not provided."
+}
+
+
+like Route
+===================
+GET http://localhost:9000/api/like/<postid>
+
+{
+    "status": 404,
+    "message": "ID is not found."
+}
+
+{
+    "detail": "Authentication credentials were not provided."
+}
+
+like
+{
+    "status": 200,
+    "message": "Liked"
+}
+
+{
+    "status": 200,
+    "message": "Unliked"
+}
+
+comment post
+===========================
+post http://localhost:9000/api/comment/<postid>
+post
+{
+    "comment": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+}
+success
+==============
+{
+    "status": 201,
+    "message": "Comment added successfully",
+    "id": 36
+}
+
+{
+    "status": 404,
+    "message": "Post not found"
+}

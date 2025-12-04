@@ -10,7 +10,8 @@ class Profile(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
-    description = models.TextField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
     image = models.ImageField(upload_to='post/images', blank=True, null=True)
     video = models.FileField(upload_to='post/videos', blank=True, null=True)
     date = models.DateTimeField(auto_now=True)
@@ -38,5 +39,5 @@ class Like(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    comment= models.TextField()
+    content= models.TextField()
     date = models.DateTimeField(auto_now=True)
