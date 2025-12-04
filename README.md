@@ -92,7 +92,8 @@ Authorization: Bearer <token>
 ```
 Body (multipart/form-data):
 ```
-description
+title
+content
 image (optional)
 video (optional)
 ```
@@ -102,6 +103,8 @@ video (optional)
 # ⚙️ Installation
 
 ```
+python3 -m venv env or python -m venv env
+source env/bin/activate(env\Scripts\activate on window)
 git clone <repo-url>
 cd project
 pip install -r requirements.txt
@@ -114,10 +117,8 @@ python manage.py runserver
 # 🐳 Docker Setup
 
 ```
-docker build -t social_app .
-docker run -p 9000:9000 social_app
-docker tag social_app username/social_app
-docker push username/social_app
+docker pull khun90/social_app:v1
+docker run --name webserver -dp 8000:8000 social_app:v1
 ```
 
 ---

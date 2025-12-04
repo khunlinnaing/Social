@@ -2,8 +2,8 @@ register(Need to send By Form)
 ===========
 post http://localhost:9000/api/register/
 
-this parameters
-======================
+Register
+===============
 username
 email
 password
