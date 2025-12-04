@@ -92,7 +92,7 @@
             <p>{{ post.content}}</p>
             <div class="row">
                 {% if post.image %}
-                    <img src="{{ post.image.url }}" class="w-50" style="height: 50%">
+                    <img src="{{ post.image.url }}" class="w-50" height="300">
                 {% endif %}
                 {% if post.video %}
                 <video class="w-50" height="300" controls>
@@ -176,7 +176,7 @@
         if (!file) return;
 
         const imgURL = URL.createObjectURL(file);
-        display.innerHTML += `<img src="${imgURL}" class="preview-img w-50" style="height: 50%">`;
+        display.innerHTML += `<img src="${imgURL}" class="preview-img w-50" height="300">`;
     });
     document.getElementById('id_video').addEventListener('change', function () {
         const file = this.files[0];
