@@ -114,7 +114,7 @@ python manage.py runserver
 
 ---
 
-# 🐳 Docker Setup
+# 🐳 Run Project by docker
 
 ```
 docker pull khun90/social_app:v1
