@@ -174,7 +174,8 @@ post http://localhost:9000/api/posts/create
 
 parameters(need to add token in authenticated)
 =============
-description String
+title
+content
 image
 video
 
