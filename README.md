@@ -118,7 +118,7 @@ python manage.py runserver
 
 ```
 docker pull khun90/social_app:v1
-docker run --name webserver -dp 8000:8000 social_app:v1
+docker run --name webserver -dp 8000:8000 khun90/social_app:v1
 ```
 
 ---
